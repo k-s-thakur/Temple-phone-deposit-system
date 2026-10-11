@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { api } from '../services/api';
 import { AuthSession } from '../types';
-import { Smartphone, KeyRound, User, Lock, AlertCircle, ArrowRight } from 'lucide-react';
+import { Smartphone, User, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 
 interface LoginViewProps {
   onLoginSuccess: (session: AuthSession) => void;
@@ -28,21 +28,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
       onLoginSuccess(session);
     } catch (err: any) {
       setError(err.message || 'लॉगिन असफल रहा। कृपया यूज़रनेम और पासवर्ड जांचें।');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleQuickLogin = async (user: string, pass: string) => {
-    setUsername(user);
-    setPassword(pass);
-    setLoading(true);
-    setError(null);
-    try {
-      const session = await api.login(user, pass);
-      onLoginSuccess(session);
-    } catch (err: any) {
-      setError(err.message || 'लॉगिन असफल रहा।');
     } finally {
       setLoading(false);
     }
@@ -120,54 +105,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
             )}
           </button>
         </form>
-
-        {/* Quick Demo Accounts */}
-        <div className="mt-8 pt-6 border-t border-slate-100">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <KeyRound className="w-3.5 h-3.5" />
-              1-क्लिक डेमो खाते
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin', 'Admin@123')}
-              className="w-full py-2 px-3 text-left bg-slate-50 hover:bg-amber-50/70 border border-slate-200 hover:border-amber-300 rounded-xl transition-all flex items-center justify-between text-xs cursor-pointer group"
-            >
-              <div>
-                <span className="font-semibold text-slate-800 group-hover:text-amber-900">मुख्य व्यवस्थापक (Chief Admin)</span>
-                <span className="text-slate-400 ml-2 font-mono">admin / Admin@123</span>
-              </div>
-              <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded font-medium">सभी सुविधाएं</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('deposit_op', 'Operator@123')}
-              className="w-full py-2 px-3 text-left bg-slate-50 hover:bg-emerald-50/70 border border-slate-200 hover:border-emerald-300 rounded-xl transition-all flex items-center justify-between text-xs cursor-pointer group"
-            >
-              <div>
-                <span className="font-semibold text-slate-800 group-hover:text-emerald-900">जमा ऑपरेटर (Deposit Operator)</span>
-                <span className="text-slate-400 ml-2 font-mono">deposit_op / Operator@123</span>
-              </div>
-              <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-medium">जमा काउंटर</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('retrieval_op', 'Operator@123')}
-              className="w-full py-2 px-3 text-left bg-slate-50 hover:bg-sky-50/70 border border-slate-200 hover:border-sky-300 rounded-xl transition-all flex items-center justify-between text-xs cursor-pointer group"
-            >
-              <div>
-                <span className="font-semibold text-slate-800 group-hover:text-sky-900">वापसी ऑपरेटर (Retrieval Operator)</span>
-                <span className="text-slate-400 ml-2 font-mono">retrieval_op / Operator@123</span>
-              </div>
-              <span className="bg-sky-100 text-sky-800 text-[10px] px-2 py-0.5 rounded font-medium">वापसी काउंटर</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
