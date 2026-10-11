@@ -123,7 +123,7 @@ export const DepositView: React.FC<DepositViewProps> = ({ onSuccessDeposit }) =>
       await loadTokens();
       if (onSuccessDeposit) onSuccessDeposit();
     } catch (err: any) {
-      setError(err.message || 'Deposit creation failed. Please check inputs.');
+      setError(err.message || 'फोन जमा करने में त्रुटि हुई। कृपया इनपुट जांचें।');
     } finally {
       setLoading(false);
     }

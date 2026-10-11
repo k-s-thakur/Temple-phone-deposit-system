@@ -31,7 +31,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
       const data = await api.getDashboardStats();
       setStats(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to load dashboard metrics.');
+      setError(err.message || 'डैशबोर्ड आंकड़े लोड करने में विफल।');
     } finally {
       setLoading(false);
     }
@@ -50,10 +50,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
             <span className="p-2 bg-amber-100 text-amber-700 rounded-xl">
               <Layers className="w-5 h-5" />
             </span>
-            Counter Operations Dashboard
+            काउंटर संचालन डैशबोर्ड
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Real-time live metrics, vault inventory, and counter throughput
+            लाइव मेट्रिक्स, वॉल्ट इन्वेंटरी और काउंटर कार्य-प्रवाह
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
           className="self-start sm:self-auto flex items-center space-x-1.5 px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-xs transition-colors cursor-pointer"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refresh Data</span>
+          <span>डेटा रीफ्रेश करें</span>
         </button>
       </div>
 
@@ -79,7 +79,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
-              Pending in Vault
+              वॉल्ट में लंबित फोन
             </span>
             <span className="p-2 bg-amber-50 text-amber-600 rounded-xl">
               <Smartphone className="w-5 h-5" />
@@ -89,11 +89,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
             <span className="text-4xl font-black font-mono text-slate-900">
               {stats?.currentPendingPhones ?? 0}
             </span>
-            <span className="text-sm font-semibold text-slate-500">Phones</span>
+            <span className="text-sm font-semibold text-slate-500">फोन</span>
           </div>
           <div className="mt-2 text-xs text-slate-500 flex items-center gap-1.5">
-            <span className="font-semibold text-amber-700">{stats?.activeTokensCount ?? 0} Active Tokens</span>
-            <span>currently deposited</span>
+            <span className="font-semibold text-amber-700">{stats?.activeTokensCount ?? 0} सक्रिय टोकन</span>
+            <span>वर्तमान में जमा</span>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-sky-800">
-              Tokens in Use
+              उपयोग में टोकन
             </span>
             <span className="p-2 bg-sky-50 text-sky-600 rounded-xl">
               <Layers className="w-5 h-5" />
@@ -111,10 +111,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
             <span className="text-4xl font-black font-mono text-slate-900">
               {stats?.activeTokensCount ?? 0}
             </span>
-            <span className="text-sm font-semibold text-slate-500">Tokens</span>
+            <span className="text-sm font-semibold text-slate-500">टोकन</span>
           </div>
           <div className="mt-2 text-xs text-slate-500">
-            Assigned to temple visitors
+            दर्शनार्थियों को आवंटित
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-              Today's Deposits
+              आज के कुल डिपॉजिट
             </span>
             <span className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
               <ArrowDownLeft className="w-5 h-5" />
@@ -132,10 +132,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
             <span className="text-4xl font-black font-mono text-slate-900">
               {stats?.depositsToday ?? 0}
             </span>
-            <span className="text-sm font-semibold text-slate-500">Transactions</span>
+            <span className="text-sm font-semibold text-slate-500">लेन-देन</span>
           </div>
           <div className="mt-2 text-xs text-emerald-700 font-medium">
-            Recorded since shift start
+            शिफ्ट शुरू होने से अब तक दर्ज
           </div>
         </div>
 
@@ -143,7 +143,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-800">
-              Today's Returns
+              आज की कुल वापसी
             </span>
             <span className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
               <ArrowUpRight className="w-5 h-5" />
@@ -153,10 +153,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
             <span className="text-4xl font-black font-mono text-slate-900">
               {stats?.returnsToday ?? 0}
             </span>
-            <span className="text-sm font-semibold text-slate-500">Returned</span>
+            <span className="text-sm font-semibold text-slate-500">वापस किए गए</span>
           </div>
           <div className="mt-2 text-xs text-indigo-700 font-medium">
-            Tokens released to inventory
+            इन्वेंटरी में पुनः उपलब्ध टोकन
           </div>
         </div>
       </div>
@@ -165,16 +165,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-sm flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-lg">Fast Deposit Counter</h3>
+            <h3 className="font-bold text-lg">त्वरित फोन जमा काउंटर</h3>
             <p className="text-xs text-amber-100 mt-1 max-w-sm">
-              Rapid intake form for allocating pre-printed tokens and printing deposit receipts.
+              टोकन आवंटन और फोन जमा रसीद जारी करने का त्वरित फॉर्म।
             </p>
             {onNavigateToTab && (
               <button
                 onClick={() => onNavigateToTab('deposit')}
                 className="mt-4 px-4 py-2 bg-white text-amber-800 font-bold text-xs rounded-xl hover:bg-amber-50 transition-colors shadow-xs cursor-pointer"
               >
-                Open Deposit Window
+                जमा विंडो खोलें
               </button>
             )}
           </div>
@@ -183,16 +183,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
 
         <div className="bg-gradient-to-br from-sky-600 to-indigo-600 rounded-2xl p-6 text-white shadow-sm flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-lg">Full Return Counter</h3>
+            <h3 className="font-bold text-lg">फोन वापसी (रिट्रीवल) काउंटर</h3>
             <p className="text-xs text-sky-100 mt-1 max-w-sm">
-              Token lookup window for verifying phone count and releasing tokens back to active inventory.
+              टोकन खोज, फोन संख्या सत्यापन और इन्वेंटरी रिलीज विंडो।
             </p>
             {onNavigateToTab && (
               <button
                 onClick={() => onNavigateToTab('retrieval')}
                 className="mt-4 px-4 py-2 bg-white text-sky-800 font-bold text-xs rounded-xl hover:bg-sky-50 transition-colors shadow-xs cursor-pointer"
               >
-                Open Retrieval Window
+                वापसी विंडो खोलें
               </button>
             )}
           </div>
@@ -205,21 +205,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center space-x-2">
             <Users className="w-4 h-4 text-slate-500" />
-            <h3 className="font-bold text-slate-900 text-sm">Operator-Wise Counter Throughput</h3>
+            <h3 className="font-bold text-slate-900 text-sm">ऑपरेटर अनुसार काउंटर कार्य-विवरण</h3>
           </div>
-          <span className="text-xs text-slate-500">Live Shift Breakdown</span>
+          <span className="text-xs text-slate-500">लाइव शिफ्ट विवरण</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-100 text-slate-600 uppercase font-bold tracking-wider">
               <tr>
-                <th className="px-6 py-3">Staff Operator</th>
-                <th className="px-6 py-3">Role</th>
-                <th className="px-6 py-3 text-center">Deposits Done</th>
-                <th className="px-6 py-3 text-center">Phones Taken In</th>
-                <th className="px-6 py-3 text-center">Returns Done</th>
-                <th className="px-6 py-3 text-center">Phones Returned</th>
+                <th className="px-6 py-3">स्टाफ ऑपरेटर</th>
+                <th className="px-6 py-3">भूमिका (Role)</th>
+                <th className="px-6 py-3 text-center">किए गए डिपॉजिट</th>
+                <th className="px-6 py-3 text-center">जमा लिए गए फोन</th>
+                <th className="px-6 py-3 text-center">की गई वापसी</th>
+                <th className="px-6 py-3 text-center">वापस किए गए फोन</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -232,7 +232,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
                     </td>
                     <td className="px-6 py-3.5">
                       <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-mono">
-                        {op.role}
+                        {op.role === 'ADMIN' ? 'व्यवस्थापक' : op.role === 'DEPOSIT_OPERATOR' ? 'जमा ऑपरेटर' : 'वापसी ऑपरेटर'}
                       </span>
                     </td>
                     <td className="px-6 py-3.5 text-center font-bold text-slate-900">
@@ -252,7 +252,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToTab })
               ) : (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-slate-400">
-                    No operator records available.
+                    कोई ऑपरेटर रिकॉर्ड उपलब्ध नहीं है।
                   </td>
                 </tr>
               )}

@@ -40,7 +40,7 @@ export const UserManagementView: React.FC = () => {
       const data = await api.getUsers();
       setUsers(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch user accounts.');
+      setError(err.message || 'स्टाफ खाते लोड करने में विफल।');
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ export const UserManagementView: React.FC = () => {
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUsername.trim() || !newDisplayName.trim() || !newPassword) {
-      alert('Please fill out all required fields.');
+      alert('कृपया सभी आवश्यक फ़ील्ड भरें।');
       return;
     }
 
@@ -74,15 +74,15 @@ export const UserManagementView: React.FC = () => {
       setNewPassword('');
       await fetchUsers();
     } catch (err: any) {
-      alert(err.message || 'User creation failed.');
+      alert(err.message || 'स्टाफ खाता निर्माण असफल रहा।');
     } finally {
       setCreateLoading(false);
     }
   };
 
   const handleToggleStatus = async (user: User) => {
-    const action = user.active ? 'deactivate' : 'activate';
-    if (!confirm(`Are you sure you want to ${action} user @${user.username}?`)) {
+    const action = user.active ? 'निष्क्रिय' : 'सक्रिय';
+    if (!confirm(`क्या आप वाकई यूज़र @${user.username} को ${action} करना चाहते हैं?`)) {
       return;
     }
 
@@ -90,26 +90,26 @@ export const UserManagementView: React.FC = () => {
       await api.updateUserStatus(user.user_id, !user.active);
       await fetchUsers();
     } catch (err: any) {
-      alert(err.message || 'Status update failed.');
+      alert(err.message || 'खाता स्थिति अपडेट करने में विफल।');
     }
   };
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetTargetUser || !resetNewPass || resetNewPass.length < 6) {
-      alert('Password must be at least 6 characters.');
+      alert('पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।');
       return;
     }
 
     setResetLoading(true);
     try {
       await api.resetPassword(resetTargetUser.user_id, resetNewPass);
-      alert(`Password updated successfully for @${resetTargetUser.username}.`);
+      alert(`यूज़र @${resetTargetUser.username} का पासवर्ड सफलतापूर्वक अपडेट कर दिया गया।`);
       setResetTargetUser(null);
       setResetNewPass('');
       await fetchUsers();
     } catch (err: any) {
-      alert(err.message || 'Password reset failed.');
+      alert(err.message || 'पासवर्ड रीसेट असफल रहा।');
     } finally {
       setResetLoading(false);
     }
@@ -123,10 +123,10 @@ export const UserManagementView: React.FC = () => {
             <span className="p-2 bg-amber-100 text-amber-700 rounded-xl">
               <Users className="w-5 h-5" />
             </span>
-            Staff User Accounts Management
+            स्टाफ व ऑपरेटर खाता प्रबंधन
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Manage individual staff logins, role assignments, and security status (Admin only)
+            स्टाफ लॉगिन, भूमिका आवंटन और सुरक्षा स्थिति का प्रबंधन (केवल व्यवस्थापक)
           </p>
         </div>
 
@@ -136,7 +136,7 @@ export const UserManagementView: React.FC = () => {
             className="flex items-center space-x-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-xs cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Refresh</span>
+            <span>रीफ्रेश करें</span>
           </button>
 
           <button
@@ -144,7 +144,7 @@ export const UserManagementView: React.FC = () => {
             className="flex items-center space-x-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
           >
             <UserPlus className="w-3.5 h-3.5" />
-            <span>Create Staff Account</span>
+            <span>नया स्टाफ खाता बनाएं</span>
           </button>
         </div>
       </div>
@@ -161,13 +161,13 @@ export const UserManagementView: React.FC = () => {
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-100 text-slate-600 uppercase font-bold tracking-wider">
               <tr>
-                <th className="px-6 py-3">Staff Member</th>
-                <th className="px-6 py-3">Username</th>
-                <th className="px-6 py-3">Role</th>
-                <th className="px-6 py-3">Contact Phone</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Last Login</th>
-                <th className="px-6 py-3 text-right">Actions</th>
+                <th className="px-6 py-3">स्टाफ सदस्य</th>
+                <th className="px-6 py-3">यूज़रनेम</th>
+                <th className="px-6 py-3">भूमिका (Role)</th>
+                <th className="px-6 py-3">संपर्क मोबाइल</th>
+                <th className="px-6 py-3">खाता स्थिति</th>
+                <th className="px-6 py-3">अंतिम लॉगिन</th>
+                <th className="px-6 py-3 text-right">कार्रवाई</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -183,17 +183,17 @@ export const UserManagementView: React.FC = () => {
                   <td className="px-6 py-3.5">
                     {u.role === 'ADMIN' && (
                       <span className="bg-amber-100 text-amber-800 border border-amber-300 font-semibold px-2 py-0.5 rounded text-[11px]">
-                        Admin
+                        व्यवस्थापक (Admin)
                       </span>
                     )}
                     {u.role === 'DEPOSIT_OPERATOR' && (
                       <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold px-2 py-0.5 rounded text-[11px]">
-                        Deposit Operator
+                        जमा ऑपरेटर
                       </span>
                     )}
                     {u.role === 'RETRIEVAL_OPERATOR' && (
                       <span className="bg-sky-100 text-sky-800 border border-sky-300 font-semibold px-2 py-0.5 rounded text-[11px]">
-                        Retrieval Operator
+                        वापसी ऑपरेटर
                       </span>
                     )}
                   </td>
@@ -204,25 +204,25 @@ export const UserManagementView: React.FC = () => {
                     {u.active ? (
                       <span className="inline-flex items-center gap-1 text-emerald-700 font-bold text-[11px]">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        Active
+                        सक्रिय
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-rose-600 font-bold text-[11px]">
                         <XCircle className="w-3.5 h-3.5" />
-                        Deactivated
+                        निष्क्रिय
                       </span>
                     )}
                   </td>
                   <td className="px-6 py-3.5 text-slate-500 text-[11px]">
-                    {u.last_login_at ? new Date(u.last_login_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Never'}
+                    {u.last_login_at ? new Date(u.last_login_at).toLocaleString('hi-IN', { dateStyle: 'short', timeStyle: 'short' }) : 'कभी नहीं'}
                   </td>
                   <td className="px-6 py-3.5 text-right space-x-2 whitespace-nowrap">
                     <button
                       onClick={() => setResetTargetUser(u)}
                       className="px-2.5 py-1 text-slate-600 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors cursor-pointer"
-                      title="Reset Password"
+                      title="पासवर्ड रीसेट करें"
                     >
-                      Reset Pass
+                      पासवर्ड रीसेट
                     </button>
                     <button
                       onClick={() => handleToggleStatus(u)}
@@ -232,7 +232,7 @@ export const UserManagementView: React.FC = () => {
                           : 'text-emerald-700 hover:bg-emerald-50 border-emerald-200'
                       }`}
                     >
-                      {u.active ? 'Deactivate' : 'Activate'}
+                      {u.active ? 'निष्क्रिय करें' : 'सक्रिय करें'}
                     </button>
                   </td>
                 </tr>
@@ -246,68 +246,68 @@ export const UserManagementView: React.FC = () => {
       {createModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 p-6 animate-scale-up">
-            <h4 className="font-bold text-base text-slate-900 mb-1">Create New Staff Account</h4>
+            <h4 className="font-bold text-base text-slate-900 mb-1">नया स्टाफ खाता बनाएं</h4>
             <p className="text-xs text-slate-500 mb-4">
-              Individual logins required by PRD Section 3.4. Shared accounts are strictly prohibited.
+              प्रत्येक स्टाफ सदस्य के लिए अलग लॉगिन आवश्यक है। साझा खाता सख्त प्रतिबंधित है।
             </p>
 
             <form onSubmit={handleCreateUser} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Display Name (Full Name)</label>
+                <label className="block font-bold text-slate-700 mb-1">नाम (पूरा नाम) <span className="text-rose-500">*</span></label>
                 <input
                   type="text"
                   required
                   value={newDisplayName}
                   onChange={(e) => setNewDisplayName(e.target.value)}
-                  placeholder="e.g. Suresh Patel"
+                  placeholder="उदा. सुरेश पटेल"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Username (Login ID)</label>
+                <label className="block font-bold text-slate-700 mb-1">यूज़रनेम (लॉगिन आईडी) <span className="text-rose-500">*</span></label>
                 <input
                   type="text"
                   required
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
-                  placeholder="e.g. suresh_p"
+                  placeholder="उदा. suresh_p"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Role Assignment</label>
+                <label className="block font-bold text-slate-700 mb-1">भूमिका (Role) आवंटन</label>
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value as any)}
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-semibold"
                 >
-                  <option value="DEPOSIT_OPERATOR">Deposit Operator (Intake only)</option>
-                  <option value="RETRIEVAL_OPERATOR">Retrieval Operator (Return only)</option>
-                  <option value="ADMIN">Administrator (Full control)</option>
+                  <option value="DEPOSIT_OPERATOR">जमा ऑपरेटर (केवल फोन जमा काउंटर)</option>
+                  <option value="RETRIEVAL_OPERATOR">वापसी ऑपरेटर (केवल फोन वापसी काउंटर)</option>
+                  <option value="ADMIN">व्यवस्थापक / Admin (पूर्ण नियंत्रण)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Staff Phone Number (Admin Contact)</label>
+                <label className="block font-bold text-slate-700 mb-1">स्टाफ संपर्क मोबाइल नंबर</label>
                 <input
                   type="tel"
                   value={newPhone}
                   onChange={(e) => setNewPhone(e.target.value)}
-                  placeholder="e.g. 9876543210"
+                  placeholder="उदा. 9876543210"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Initial Password</label>
+                <label className="block font-bold text-slate-700 mb-1">प्रारंभिक पासवर्ड <span className="text-rose-500">*</span></label>
                 <input
                   type="password"
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Min 6 characters..."
+                  placeholder="न्यूनतम 6 अक्षर..."
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
@@ -318,14 +318,14 @@ export const UserManagementView: React.FC = () => {
                   onClick={() => setCreateModalOpen(false)}
                   className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
                 >
-                  Cancel
+                  रद्द करें
                 </button>
                 <button
                   type="submit"
                   disabled={createLoading}
                   className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
-                  {createLoading ? 'Creating...' : 'Create Account'}
+                  {createLoading ? 'खाता बनाया जा रहा है...' : 'खाता बनाएं'}
                 </button>
               </div>
             </form>
@@ -337,20 +337,20 @@ export const UserManagementView: React.FC = () => {
       {resetTargetUser && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 p-6 animate-scale-up">
-            <h4 className="font-bold text-base text-slate-900 mb-1">Reset Password</h4>
+            <h4 className="font-bold text-base text-slate-900 mb-1">पासवर्ड रीसेट करें</h4>
             <p className="text-xs text-slate-500 mb-4">
-              Enter a new secure password for <strong>@{resetTargetUser.username}</strong> ({resetTargetUser.display_name}).
+              यूज़र <strong>@{resetTargetUser.username}</strong> ({resetTargetUser.display_name}) के लिए नया पासवर्ड दर्ज करें।
             </p>
 
             <form onSubmit={handleResetPassword} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">New Password</label>
+                <label className="block font-bold text-slate-700 mb-1">नया पासवर्ड <span className="text-rose-500">*</span></label>
                 <input
                   type="password"
                   required
                   value={resetNewPass}
                   onChange={(e) => setResetNewPass(e.target.value)}
-                  placeholder="Enter new password (min 6 chars)..."
+                  placeholder="नया पासवर्ड दर्ज करें (न्यूनतम 6 अक्षर)..."
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
@@ -361,14 +361,14 @@ export const UserManagementView: React.FC = () => {
                   onClick={() => setResetTargetUser(null)}
                   className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
                 >
-                  Cancel
+                  रद्द करें
                 </button>
                 <button
                   type="submit"
                   disabled={resetLoading}
                   className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
-                  {resetLoading ? 'Updating...' : 'Update Password'}
+                  {resetLoading ? 'अपडेट हो रहा है...' : 'पासवर्ड अपडेट करें'}
                 </button>
               </div>
             </form>

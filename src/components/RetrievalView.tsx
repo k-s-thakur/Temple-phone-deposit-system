@@ -44,12 +44,12 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
   const lookupToken = async (targetToken: string) => {
     const trimmed = targetToken.trim();
     if (!trimmed) {
-      setError('Please enter a token number to search.');
+      setError('कृपया खोजने के लिए टोकन नंबर दर्ज करें।');
       return;
     }
 
     if (!/^\d+$/.test(trimmed)) {
-      setError('Token number must contain digits only.');
+      setError('टोकन नंबर में केवल अंक होने चाहिए।');
       return;
     }
 
@@ -63,7 +63,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
       const dep = await api.getActiveDepositByToken(norm);
       setActiveDeposit(dep);
     } catch (err: any) {
-      setError(err.message || `No active deposit found for Token ${norm}.`);
+      setError(err.message || `टोकन ${norm} के लिए कोई सक्रिय जमा रिकॉर्ड नहीं मिला।`);
     } finally {
       setLoading(false);
     }
@@ -87,7 +87,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
       setActiveDeposit(null);
       if (onSuccessReturn) onSuccessReturn();
     } catch (err: any) {
-      setError(err.message || 'Return operation failed.');
+      setError(err.message || 'फोन वापसी की प्रक्रिया असफल रही।');
     } finally {
       setReturnSubmitting(false);
     }
@@ -119,7 +119,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
       });
       setEscalateSubmitted(true);
     } catch (err: any) {
-      setError(err.message || 'Failed to submit escalation.');
+      setError(err.message || 'शिकायत दर्ज करने में विफल रहे।');
     }
   };
 
@@ -132,10 +132,10 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
             <span className="p-2 bg-sky-100 text-sky-700 rounded-xl">
               <Smartphone className="w-5 h-5" />
             </span>
-            Retrieve & Return Mobile Phones
+            मोबाइल फोन वापस करें (रिट्रीवल)
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Enter physical token number to locate active deposit and verify handover
+            सक्रिय जमा रिकॉर्ड खोजने और फोन सुपुर्द करने के लिए भौतिक टोकन नंबर दर्ज करें
           </p>
         </div>
       </div>
@@ -144,7 +144,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
         <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-start space-x-3 text-rose-800 text-sm">
           <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
           <div>
-            <span className="font-semibold">Lookup/Return Error: </span>
+            <span className="font-semibold">खोज / वापसी में त्रुटि: </span>
             {error}
           </div>
         </div>
@@ -160,7 +160,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
               type="text"
               value={tokenInput}
               onChange={(e) => setTokenInput(e.target.value)}
-              placeholder="Enter Pre-Printed Token No (e.g. 001, 042)"
+              placeholder="भौतिक टोकन नंबर दर्ज करें (उदा. 001, 042)"
               className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-lg font-mono font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
             />
           </div>
@@ -175,7 +175,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
             ) : (
               <>
                 <Search className="w-4 h-4" />
-                <span>Find Active Deposit</span>
+                <span>सक्रिय जमा खोजें</span>
               </>
             )}
           </button>
@@ -188,9 +188,9 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
           <div className="bg-gradient-to-r from-sky-600 to-indigo-600 px-6 py-4 text-white flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <span className="bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-mono font-bold">
-                Token #{activeDeposit.token_no}
+                टोकन #{activeDeposit.token_no}
               </span>
-              <span className="text-sm font-semibold">Active Deposit Record</span>
+              <span className="text-sm font-semibold">सक्रिय जमा रिकॉर्ड</span>
             </div>
             <span className="text-xs font-mono bg-black/20 px-2 py-0.5 rounded">
               {activeDeposit.deposit_id}
@@ -201,19 +201,19 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
             {/* BIG HIGHLIGHT: Number of Phones to hand over */}
             <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 text-center">
               <div className="text-xs uppercase font-extrabold tracking-wider text-sky-800">
-                Counter Handover Verification
+                काउंटर सुपुर्दगी सत्यापन
               </div>
               <div className="my-2 flex items-center justify-center space-x-3">
                 <span className="text-5xl font-black font-mono text-sky-950">
                   {activeDeposit.phone_count}
                 </span>
                 <span className="text-xl font-bold text-sky-800">
-                  {activeDeposit.phone_count === 1 ? 'Mobile Phone' : 'Mobile Phones'}
+                  मोबाइल फोन
                 </span>
               </div>
               <div className="inline-flex items-center space-x-1.5 bg-sky-100 text-sky-900 px-3 py-1 rounded-full text-xs font-semibold">
                 <AlertCircle className="w-3.5 h-3.5 text-sky-700" />
-                <span>Full return required — partial return is prohibited by system policy</span>
+                <span>संपूर्ण वापसी अनिवार्य — सिस्टम नीति के अनुसार आंशिक फोन वापसी सख्त प्रतिबंधित है</span>
               </div>
             </div>
 
@@ -221,7 +221,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
                 <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Visitor Information
+                  दर्शनार्थी विवरण
                 </div>
                 <div className="flex items-center space-x-2 text-sm">
                   <User className="w-4 h-4 text-slate-400" />
@@ -235,23 +235,23 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
 
               <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
                 <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Storage & Intake Audit
+                  स्टोरेज व जमा ऑडिट
                 </div>
                 {activeDeposit.storage_location ? (
                   <div className="flex items-center space-x-2 text-sm text-slate-800 font-semibold">
                     <MapPin className="w-4 h-4 text-amber-600" />
-                    <span>Location: {activeDeposit.storage_location}</span>
+                    <span>स्थान / ट्रे: {activeDeposit.storage_location}</span>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-400 italic">No specific storage tray recorded</div>
+                  <div className="text-xs text-slate-400 italic">कोई विशिष्ट ट्रे दर्ज नहीं है</div>
                 )}
                 <div className="flex items-center space-x-2 text-xs text-slate-500">
                   <Clock className="w-3.5 h-3.5" />
-                  <span>Deposited: {new Date(activeDeposit.deposited_at).toLocaleTimeString()} ({activeDeposit.deposit_by})</span>
+                  <span>जमा समय: {new Date(activeDeposit.deposited_at).toLocaleTimeString('hi-IN')} ({activeDeposit.deposit_by})</span>
                 </div>
                 {activeDeposit.notes && (
                   <div className="text-xs text-slate-600 bg-amber-50/70 p-2 rounded-lg border border-amber-200/60">
-                    <strong>Notes:</strong> {activeDeposit.notes}
+                    <strong>नोट:</strong> {activeDeposit.notes}
                   </div>
                 )}
               </div>
@@ -265,7 +265,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
                 className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 rounded-xl transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
               >
                 <ShieldAlert className="w-4 h-4 text-amber-700" />
-                <span>Lost Token / Mismatch Escalation</span>
+                <span>खोया टोकन / विसंगति की शिकायत (Admin)</span>
               </button>
 
               <button
@@ -277,12 +277,12 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
                 {returnSubmitting ? (
                   <>
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    <span>Confirming Return...</span>
+                    <span>वापसी दर्ज की जा रही है...</span>
                   </>
                 ) : (
                   <>
                     <CheckCircle2 className="w-5 h-5" />
-                    <span>Confirm Handover of All {activeDeposit.phone_count} Phones</span>
+                    <span>सभी {activeDeposit.phone_count} फोन सुपुर्दगी की पुष्टि करें</span>
                   </>
                 )}
               </button>
@@ -297,27 +297,27 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
           <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full mx-auto flex items-center justify-center mb-4">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Phones Returned Successfully!</h3>
+          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">फोन सफलतापूर्वक वापस सुपुर्द किए गए!</h3>
           <p className="text-sm text-slate-600 mt-1">
-            Token <strong>#{successResult.token_no}</strong> has been marked returned and released back to active inventory.
+            टोकन <strong>#{successResult.token_no}</strong> को वापस चिह्नित कर पुनः सक्रिय इन्वेंटरी में उपलब्ध कर दिया गया है।
           </p>
 
           <div className="my-6 inline-block bg-slate-50 border border-slate-200 rounded-xl p-4 text-left max-w-sm w-full text-xs space-y-1.5">
             <div className="flex justify-between">
-              <span className="text-slate-500">Deposit ID:</span>
+              <span className="text-slate-500">डिपॉजिट आईडी:</span>
               <span className="font-mono font-semibold">{successResult.deposit_id}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Returned Phones:</span>
-              <span className="font-bold text-emerald-700">{successResult.phone_count} Phones</span>
+              <span className="text-slate-500">वापस किए गए फोन:</span>
+              <span className="font-bold text-emerald-700">{successResult.phone_count} फोन</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Visitor:</span>
+              <span className="text-slate-500">दर्शनार्थी:</span>
               <span className="font-semibold">{successResult.visitor_name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Return Timestamp:</span>
-              <span>{new Date(successResult.returned_at || Date.now()).toLocaleTimeString()}</span>
+              <span className="text-slate-500">वापसी समय:</span>
+              <span>{new Date(successResult.returned_at || Date.now()).toLocaleTimeString('hi-IN')}</span>
             </div>
           </div>
 
@@ -326,7 +326,7 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
               onClick={handleResetForNext}
               className="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md transition-all inline-flex items-center space-x-2 text-sm cursor-pointer"
             >
-              <span>Process Next Return</span>
+              <span>अगले दर्शनार्थी का फोन वापस करें</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -342,52 +342,52 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
                 <AlertTriangle className="w-6 h-6 text-amber-700" />
               </div>
               <div>
-                <h4 className="font-bold text-base text-slate-900">Escalate Issue to Admin</h4>
-                <p className="text-xs text-slate-500">PRD 5.3: Disputed identity, count mismatch, or lost token</p>
+                <h4 className="font-bold text-base text-slate-900">समस्या व्यवस्थापक (Admin) को भेजें</h4>
+                <p className="text-xs text-slate-500">खोया हुआ टोकन, फोन संख्या में अंतर या पहचान विवाद</p>
               </div>
             </div>
 
             {escalateSubmitted ? (
               <div className="text-center py-4">
                 <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                <p className="text-sm font-bold text-slate-900">Escalation Recorded in Audit Logs</p>
+                <p className="text-sm font-bold text-slate-900">शिकायत ऑडिट लॉग में दर्ज कर दी गई</p>
                 <p className="text-xs text-slate-500 mt-1">
-                  Ordinary return has been halted. Chief Admin has been alerted to review the discrepancy.
+                  सामान्य वापसी रोक दी गई है। मुख्य व्यवस्थापक को जांच के लिए सूचित कर दिया गया है।
                 </p>
                 <button
                   onClick={handleResetForNext}
                   className="mt-4 px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl cursor-pointer"
                 >
-                  Close & Continue
+                  बंद करें और जारी रखें
                 </button>
               </div>
             ) : (
               <form onSubmit={handleEscalateSubmit} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                    Select Exception Type
+                    विसंगति / समस्या का प्रकार चुनें
                   </label>
                   <select
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 font-medium"
                     onChange={(e) => setEscalateReason(e.target.value)}
                   >
-                    <option value="">-- Choose Exception --</option>
-                    <option value="Physical Token Lost by Visitor">Physical Token Lost by Visitor</option>
-                    <option value="Disputed Phone Count Mismatch">Disputed Phone Count Mismatch</option>
-                    <option value="Disputed Visitor Identity">Disputed Visitor Identity</option>
-                    <option value="Damaged or Misplaced Phone">Damaged or Misplaced Phone</option>
+                    <option value="">-- समस्या चुनें --</option>
+                    <option value="Physical Token Lost by Visitor">दर्शनार्थी द्वारा भौतिक टोकन खो दिया गया</option>
+                    <option value="Disputed Phone Count Mismatch">फोन की संख्या में विवाद / अंतर</option>
+                    <option value="Disputed Visitor Identity">दर्शनार्थी की पहचान पर विवाद</option>
+                    <option value="Damaged or Misplaced Phone">फोन क्षतिग्रस्त या स्थान पर न मिलना</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                    Details / Reason Description <span className="text-rose-500">*</span>
+                    विस्तृत कारण / विवरण दर्ज करें <span className="text-rose-500">*</span>
                   </label>
                   <textarea
                     rows={3}
                     value={escalateReason}
                     onChange={(e) => setEscalateReason(e.target.value)}
-                    placeholder="Describe the discrepancy in detail for the Admin..."
+                    placeholder="व्यवस्थापक (Admin) के लिए समस्या का विस्तृत विवरण लिखें..."
                     required
                     className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
@@ -399,13 +399,13 @@ export const RetrievalView: React.FC<RetrievalViewProps> = ({ onSuccessReturn })
                     onClick={() => setEscalateModalOpen(false)}
                     className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
                   >
-                    Cancel
+                    रद्द करें
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl shadow-xs transition-colors cursor-pointer"
                   >
-                    Submit Escalation
+                    शिकायत सबमिट करें
                   </button>
                 </div>
               </form>

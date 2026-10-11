@@ -40,7 +40,7 @@ export const TokenInventoryView: React.FC = () => {
       const data = await api.getTokens();
       setTokens(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to load tokens.');
+      setError(err.message || 'टोकन लोड करने में विफल।');
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ export const TokenInventoryView: React.FC = () => {
       setNewTokenNotes('');
       await fetchTokens();
     } catch (err: any) {
-      alert(err.message || 'Failed to add token.');
+      alert(err.message || 'टोकन जोड़ना असफल रहा।');
     } finally {
       setActionLoading(false);
     }
@@ -82,12 +82,12 @@ export const TokenInventoryView: React.FC = () => {
     const end = parseInt(batchEnd, 10);
 
     if (isNaN(start) || isNaN(end) || start > end) {
-      alert('Please enter a valid range (start <= end).');
+      alert('कृपया एक मान्य रेंज दर्ज करें (प्रारंभिक संख्या <= अंतिम संख्या)।');
       return;
     }
 
     if (end - start > 100) {
-      alert('Please batch add at most 100 tokens at a time.');
+      alert('कृपया एक बार में अधिकतम 100 टोकन जोड़ें।');
       return;
     }
 
@@ -97,7 +97,7 @@ export const TokenInventoryView: React.FC = () => {
       setBatchModalOpen(false);
       await fetchTokens();
     } catch (err: any) {
-      alert(err.message || 'Batch addition failed.');
+      alert(err.message || 'बैच में टोकन जोड़ना असफल रहा।');
     } finally {
       setActionLoading(false);
     }
@@ -108,7 +108,7 @@ export const TokenInventoryView: React.FC = () => {
       await api.toggleToken(tokenNo, !currentActive);
       await fetchTokens();
     } catch (err: any) {
-      alert(err.message || 'Failed to toggle token state.');
+      alert(err.message || 'टोकन स्थिति बदलने में विफल।');
     }
   };
 
@@ -121,10 +121,10 @@ export const TokenInventoryView: React.FC = () => {
             <span className="p-2 bg-amber-100 text-amber-700 rounded-xl">
               <Database className="w-5 h-5" />
             </span>
-            Physical Token Inventory
+            भौतिक टोकन इन्वेंटरी
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Pre-printed physical tokens registry, availability states, and batch initialization
+            मुद्रित टोकन सूची, उपलब्धता स्थिति और थोक (बैच) निर्माण
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export const TokenInventoryView: React.FC = () => {
             className="flex items-center space-x-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-xs cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Refresh</span>
+            <span>रीफ्रेश करें</span>
           </button>
 
           <button
@@ -142,7 +142,7 @@ export const TokenInventoryView: React.FC = () => {
             className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Batch Add Range</span>
+            <span>रेंज के अनुसार टोकन जोड़ें</span>
           </button>
 
           <button
@@ -150,7 +150,7 @@ export const TokenInventoryView: React.FC = () => {
             className="flex items-center space-x-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Add Token</span>
+            <span>नया टोकन जोड़ें</span>
           </button>
         </div>
       </div>
@@ -169,17 +169,17 @@ export const TokenInventoryView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search token number..."
+            placeholder="टोकन नंबर खोजें..."
             className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono"
           />
         </div>
 
         <div className="flex items-center space-x-1 overflow-x-auto w-full sm:w-auto">
           {[
-            { id: 'ALL', label: `All (${tokens.length})` },
-            { id: 'AVAILABLE', label: `Available (${tokens.filter((t) => t.is_available).length})` },
-            { id: 'IN_USE', label: `In Use (${tokens.filter((t) => t.is_in_use).length})` },
-            { id: 'INACTIVE', label: `Deactivated (${tokens.filter((t) => !t.active).length})` }
+            { id: 'ALL', label: `सभी (${tokens.length})` },
+            { id: 'AVAILABLE', label: `उपलब्ध (${tokens.filter((t) => t.is_available).length})` },
+            { id: 'IN_USE', label: `उपयोग में (${tokens.filter((t) => t.is_in_use).length})` },
+            { id: 'INACTIVE', label: `निष्क्रिय (${tokens.filter((t) => !t.active).length})` }
           ].map((item) => (
             <button
               key={item.id}
@@ -216,11 +216,11 @@ export const TokenInventoryView: React.FC = () => {
 
               <div className="mt-1 text-[10px] font-bold">
                 {!t.active ? (
-                  <span className="text-slate-500">Deactivated</span>
+                  <span className="text-slate-500">निष्क्रिय</span>
                 ) : t.is_in_use ? (
-                  <span className="text-amber-700">In Vault</span>
+                  <span className="text-amber-700">वॉल्ट में</span>
                 ) : (
-                  <span className="text-emerald-700">Available</span>
+                  <span className="text-emerald-700">उपलब्ध</span>
                 )}
               </div>
 
@@ -229,7 +229,7 @@ export const TokenInventoryView: React.FC = () => {
                 onClick={() => handleToggleToken(t.token_no, t.active)}
                 className="mt-2 text-[10px] underline text-slate-500 hover:text-slate-800 hidden group-hover:block w-full cursor-pointer"
               >
-                {t.active ? 'Disable' : 'Enable'}
+                {t.active ? 'निष्क्रिय करें' : 'सक्रिय करें'}
               </button>
             </div>
           ))}
@@ -237,7 +237,7 @@ export const TokenInventoryView: React.FC = () => {
 
         {filteredTokens.length === 0 && (
           <div className="text-center py-12 text-slate-400 text-xs">
-            No tokens found in this category.
+            इस श्रेणी में कोई टोकन नहीं मिला।
           </div>
         )}
       </div>
@@ -246,31 +246,31 @@ export const TokenInventoryView: React.FC = () => {
       {addModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 p-6 animate-scale-up">
-            <h4 className="font-bold text-base text-slate-900 mb-1">Add Token to Inventory</h4>
+            <h4 className="font-bold text-base text-slate-900 mb-1">इन्वेंटरी में नया टोकन जोड़ें</h4>
             <p className="text-xs text-slate-500 mb-4">
-              Enter digits printed on physical token. Leading zeros will be auto-preserved (e.g. 042).
+              भौतिक टोकन पर मुद्रित अंक दर्ज करें। शून्य स्वतः संरक्षित रहेंगे (उदा. 042)।
             </p>
 
             <form onSubmit={handleAddSingle} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Token Number (Digits)</label>
+                <label className="block font-bold text-slate-700 mb-1">टोकन नंबर (अंक) <span className="text-rose-500">*</span></label>
                 <input
                   type="text"
                   required
                   value={newTokenNo}
                   onChange={(e) => setNewTokenNo(e.target.value)}
-                  placeholder="e.g. 101"
+                  placeholder="उदा. 101"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-base font-bold text-slate-900"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Inventory Notes (Optional)</label>
+                <label className="block font-bold text-slate-700 mb-1">इन्वेंटरी नोट (वैकल्पिक)</label>
                 <input
                   type="text"
                   value={newTokenNotes}
                   onChange={(e) => setNewTokenNotes(e.target.value)}
-                  placeholder="e.g. Metal brass token"
+                  placeholder="उदा. पीतल का टोकन"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
@@ -281,14 +281,14 @@ export const TokenInventoryView: React.FC = () => {
                   onClick={() => setAddModalOpen(false)}
                   className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
                 >
-                  Cancel
+                  रद्द करें
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
                   className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
-                  {actionLoading ? 'Saving...' : 'Add Token'}
+                  {actionLoading ? 'सहेजा जा रहा है...' : 'टोकन जोड़ें'}
                 </button>
               </div>
             </form>
@@ -300,15 +300,15 @@ export const TokenInventoryView: React.FC = () => {
       {batchModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 p-6 animate-scale-up">
-            <h4 className="font-bold text-base text-slate-900 mb-1">Batch Generate Tokens</h4>
+            <h4 className="font-bold text-base text-slate-900 mb-1">एक साथ टोकन जनरेट करें (बैच)</h4>
             <p className="text-xs text-slate-500 mb-4">
-              Add a sequence of physical tokens in one operation (e.g. 101 to 150).
+              एक ही बार में टोकन की पूरी श्रृंखला जोड़ें (उदा. 101 से 150)।
             </p>
 
             <form onSubmit={handleBatchAdd} className="space-y-3.5 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Start Number</label>
+                  <label className="block font-bold text-slate-700 mb-1">प्रारंभिक संख्या <span className="text-rose-500">*</span></label>
                   <input
                     type="number"
                     required
@@ -318,7 +318,7 @@ export const TokenInventoryView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">End Number</label>
+                  <label className="block font-bold text-slate-700 mb-1">अंतिम संख्या <span className="text-rose-500">*</span></label>
                   <input
                     type="number"
                     required
@@ -335,14 +335,14 @@ export const TokenInventoryView: React.FC = () => {
                   onClick={() => setBatchModalOpen(false)}
                   className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
                 >
-                  Cancel
+                  रद्द करें
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
                   className="px-4 py-2 bg-slate-900 hover:bg-black text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
-                  {actionLoading ? 'Generating...' : 'Generate Batch'}
+                  {actionLoading ? 'जनरेट हो रहा है...' : 'बैच जनरेट करें'}
                 </button>
               </div>
             </form>

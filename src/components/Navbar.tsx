@@ -33,24 +33,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   const getRoleBadge = (r: Role) => {
     switch (r) {
       case 'ADMIN':
-        return <span className="bg-amber-100 text-amber-800 border border-amber-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">Admin</span>;
+        return <span className="bg-amber-100 text-amber-800 border border-amber-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">व्यवस्थापक (Admin)</span>;
       case 'DEPOSIT_OPERATOR':
-        return <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">Deposit Operator</span>;
+        return <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">जमा ऑपरेटर</span>;
       case 'RETRIEVAL_OPERATOR':
-        return <span className="bg-sky-100 text-sky-800 border border-sky-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">Retrieval Operator</span>;
+        return <span className="bg-sky-100 text-sky-800 border border-sky-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">वापसी ऑपरेटर</span>;
     }
   };
 
   const navItems = [
-    ...(role === 'ADMIN' ? [{ id: 'dashboard', label: 'Dashboard', icon: Layers }] : []),
-    ...(role === 'ADMIN' || role === 'DEPOSIT_OPERATOR' ? [{ id: 'deposit', label: 'Deposit Phone', icon: ArrowDownLeft }] : []),
-    ...(role === 'ADMIN' || role === 'RETRIEVAL_OPERATOR' ? [{ id: 'retrieval', label: 'Retrieve Phone', icon: ArrowUpRight }] : []),
-    { id: 'history', label: 'Transactions', icon: History },
+    ...(role === 'ADMIN' ? [{ id: 'dashboard', label: 'डैशबोर्ड', icon: Layers }] : []),
+    ...(role === 'ADMIN' || role === 'DEPOSIT_OPERATOR' ? [{ id: 'deposit', label: 'फोन जमा करें', icon: ArrowDownLeft }] : []),
+    ...(role === 'ADMIN' || role === 'RETRIEVAL_OPERATOR' ? [{ id: 'retrieval', label: 'फोन वापस करें', icon: ArrowUpRight }] : []),
+    { id: 'history', label: 'लेन-देन इतिहास', icon: History },
     ...(role === 'ADMIN' ? [
-      { id: 'shift_closing', label: 'Shift Closing', icon: Clock },
-      { id: 'users', label: 'Staff Users', icon: Users },
-      { id: 'tokens', label: 'Tokens Inventory', icon: Database },
-      { id: 'audit', label: 'Audit Logs', icon: FileText }
+      { id: 'shift_closing', label: 'शिफ्ट क्लोजिंग', icon: Clock },
+      { id: 'users', label: 'स्टाफ व कर्मचारी', icon: Users },
+      { id: 'tokens', label: 'टोकन इन्वेंटरी', icon: Database },
+      { id: 'audit', label: 'ऑडिट लॉग्स', icon: FileText }
     ] : [])
   ];
 
@@ -65,10 +65,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-bold text-slate-900 text-base sm:text-lg tracking-tight">Temple Phone Vault</span>
+                <span className="font-bold text-slate-900 text-base sm:text-lg tracking-tight">श्री मंदिर मोबाइल वॉल्ट</span>
                 <span className="hidden sm:inline-block bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-md border border-slate-200">v1.2</span>
               </div>
-              <p className="text-xs text-slate-500 hidden sm:block">Visitor Phone Deposit & Retrieval Counter</p>
+              <p className="text-xs text-slate-500 hidden sm:block">दर्शनार्थी मोबाइल जमा व वापसी काउंटर</p>
             </div>
           </div>
 
@@ -84,11 +84,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={onLogout}
-              title="Sign Out"
+              title="लॉग आउट करें"
               className="flex items-center space-x-1 px-3 py-2 text-rose-600 hover:bg-rose-50 rounded-lg text-sm font-medium transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden md:inline">Sign Out</span>
+              <span className="hidden md:inline">लॉग आउट</span>
             </button>
           </div>
         </div>
