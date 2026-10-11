@@ -67,3 +67,23 @@ This directory contains the Google Apps Script backend code for the **Temple Pho
 1. Open the Temple Phone Deposit & Retrieval Web App frontend.
 2. In the top bar or settings modal, choose **Google Apps Script Live Backend** and paste your Web App URL.
 3. Test connection! You can now log in with the default accounts or create custom operators.
+
+---
+
+## 🔓 How to Unlock Locked Accounts (खाता अनलॉक कैसे करें)
+
+यदि गलत पासवर्ड के 5 प्रयासों के कारण खाता लॉक हो गया है (`Account locked due to too many failed login attempts`), तो इसे 3 आसान तरीकों से अनलॉक किया जा सकता है:
+
+### तरीका 1: Google Sheet में सीधे (Fastest)
+1. अपनी Google Sheet खोलें।
+2. नीचे **Users** शीट टैब पर क्लिक करें।
+3. **admin** (या संबंधित स्टाफ) वाली पंक्ति में कॉलम **J** (`failed_login_count`) को **0** कर दें।
+
+### तरीका 2: Apps Script Editor में 1-क्लिक
+1. Apps Script Editor खोलें।
+2. ऊपर टूलबार ड्रॉपडाउन में **`unlockAllUsers`** चुनें।
+3. **Run** बटन दबाएं। सभी खाते तुरंत अनलॉक हो जाएंगे!
+
+### तरीका 3: वेब लॉगिन स्क्रीन से
+- लॉगिन स्क्रीन पर सही पासवर्ड दर्ज करें। अद्यतन बैकएंड सही पासवर्ड दर्ज करने पर व्यवस्थापक खाते को स्वतः अनलॉक कर देता है।
+- या लॉगिन स्क्रीन पर "मॉक/लोकल मोड में स्विच करें" बटन दबाकर तुरंत टेस्ट मोड में लॉगिन करें।

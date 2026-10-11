@@ -115,6 +115,16 @@ export const UserManagementView: React.FC = () => {
     }
   };
 
+  const handleUnlockUser = async (user: User) => {
+    try {
+      await api.unlockUser(user.user_id);
+      alert(`यूज़र @${user.username} का खाता सफलतापूर्वक अनलॉक कर दिया गया।`);
+      await fetchUsers();
+    } catch (err: any) {
+      alert(err.message || 'खाता अनलॉक करने में विफल।');
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -201,13 +211,18 @@ export const UserManagementView: React.FC = () => {
                     {u.phone_number || '—'}
                   </td>
                   <td className="px-6 py-3.5">
-                    {u.active ? (
+                    {u.failed_login_count >= 5 ? (
+                      <span className="inline-flex items-center gap-1 text-rose-700 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded font-bold text-[11px]">
+                        <XCircle className="w-3.5 h-3.5" />
+                        लॉक (Locked)
+                      </span>
+                    ) : u.active ? (
                       <span className="inline-flex items-center gap-1 text-emerald-700 font-bold text-[11px]">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         सक्रिय
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-rose-600 font-bold text-[11px]">
+                      <span className="inline-flex items-center gap-1 text-slate-500 font-bold text-[11px]">
                         <XCircle className="w-3.5 h-3.5" />
                         निष्क्रिय
                       </span>
@@ -217,6 +232,15 @@ export const UserManagementView: React.FC = () => {
                     {u.last_login_at ? new Date(u.last_login_at).toLocaleString('hi-IN', { dateStyle: 'short', timeStyle: 'short' }) : 'कभी नहीं'}
                   </td>
                   <td className="px-6 py-3.5 text-right space-x-2 whitespace-nowrap">
+                    {u.failed_login_count >= 5 && (
+                      <button
+                        onClick={() => handleUnlockUser(u)}
+                        className="px-2.5 py-1 text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-lg font-bold transition-colors cursor-pointer"
+                        title="खाता तुरंत अनलॉक करें"
+                      >
+                        अनलॉक करें
+                      </button>
+                    )}
                     <button
                       onClick={() => setResetTargetUser(u)}
                       className="px-2.5 py-1 text-slate-600 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors cursor-pointer"

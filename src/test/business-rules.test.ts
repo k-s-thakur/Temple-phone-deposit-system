@@ -387,5 +387,19 @@ describe('Temple Phone Deposit & Retrieval PRD Business Rules', () => {
       expect(config.mode).toBe('apps_script');
     });
   });
+
+  describe('User Lockout & Unlock Mechanics', () => {
+    it('resets failed_login_count to 0 when admin unlocks a user', () => {
+      const users = engine.getUsers();
+      const op = users.find(u => u.username === 'deposit_op')!;
+      op.failed_login_count = 5;
+      engine.setUsers(users);
+
+      expect(engine.getUsers().find(u => u.username === 'deposit_op')!.failed_login_count).toBe(5);
+
+      engine.unlockUser(op.user_id, 'USR-ADMIN01');
+      expect(engine.getUsers().find(u => u.username === 'deposit_op')!.failed_login_count).toBe(0);
+    });
+  });
 });
 

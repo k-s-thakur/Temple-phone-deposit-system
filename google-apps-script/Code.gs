@@ -47,6 +47,10 @@ function doPost(e) {
         resultData = AuthService.login(payload.username, payload.password, payload.request_id || requestId);
         break;
 
+      case "emergencyUnlock":
+        resultData = AuthService.emergencyUnlock(payload.username, payload.password, payload.request_id || requestId);
+        break;
+
       case "logout":
         SessionService.revokeSession(sessionToken);
         resultData = { success: true };
@@ -96,6 +100,10 @@ function doPost(e) {
 
       case "resetPassword":
         resultData = UserService.resetPassword(sessionToken, payload.user_id, payload.new_password);
+        break;
+
+      case "unlockUser":
+        resultData = UserService.unlockUser(sessionToken, payload.user_id);
         break;
 
       case "getTokens":

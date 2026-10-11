@@ -233,3 +233,24 @@ function addTokensUpTo500() {
     Logger.log("ℹ️ All tokens up to 500 already exist.");
   }
 }
+
+/**
+ * 🔓 1-क्लिक अनलॉक टूल: सभी स्टाफ और एडमिन खातों को तुरंत अनलॉक करें
+ * Run this function directly from Apps Script Editor toolbar if accounts are locked!
+ */
+function unlockAllUsers() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Users");
+  if (!sheet) {
+    throw new Error("Users sheet not found. Run setupDatabase() first.");
+  }
+
+  var data = sheet.getDataRange().getValues();
+  // Header: user_id, username, password_hash, display_name, phone_number, role, active, created_at, last_login_at, failed_login_count, password_changed_at
+  // Column 10 (J) is failed_login_count
+  for (var r = 1; r < data.length; r++) {
+    sheet.getRange(r + 1, 10).setValue(0);
+  }
+  SpreadsheetApp.flush();
+  Logger.log("✅ All user accounts have been successfully unlocked! failed_login_count reset to 0.");
+}

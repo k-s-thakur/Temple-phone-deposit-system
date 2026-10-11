@@ -160,20 +160,34 @@ export class ApiService {
   async login(username: string, password: string): Promise<AuthSession> {
     const config = getBackendConfig();
     if (config.mode === 'apps_script') {
-      const data: any = await this.postToAppsScript('login', { username, password });
-      const session: AuthSession = {
-        token: data.sessionToken,
-        user: {
-          user_id: data.user.userId,
-          username: data.user.username,
-          display_name: data.user.displayName,
-          role: data.user.role,
-          phone_number: data.user.phoneNumber
-        },
-        expires_at: data.expiresAt
-      };
-      saveSession(session);
-      return session;
+      try {
+        const data: any = await this.postToAppsScript('login', { username, password });
+        const session: AuthSession = {
+          token: data.sessionToken,
+          user: {
+            user_id: data.user.userId,
+            username: data.user.username,
+            display_name: data.user.displayName,
+            role: data.user.role,
+            phone_number: data.user.phoneNumber
+          },
+          expires_at: data.expiresAt
+        };
+        saveSession(session);
+        return session;
+      } catch (err: any) {
+        const msg = String(err.message || '');
+        if (msg.includes('Account locked') || msg.includes('failed login attempts')) {
+          throw new Error('अत्यधिक गलत प्रयासों के कारण खाता लॉक हो गया है। Contact administrator to unlock.');
+        }
+        if (msg.includes('Invalid username or password')) {
+          throw new Error('गलत यूज़रनेम या पासवर्ड। कृपया पुनः प्रयास करें।');
+        }
+        if (msg.includes('Account has been deactivated')) {
+          throw new Error('खाता निष्क्रिय कर दिया गया है। कृपया व्यवस्थापक से संपर्क करें।');
+        }
+        throw err;
+      }
     }
 
     // Mock Mode Auth
@@ -183,22 +197,32 @@ export class ApiService {
 
     if (!found) {
       mockStorage.logAudit(cleanUser, 'LOGIN', cleanUser, 'FAILURE', 'User not found');
-      throw new Error('Invalid username or password');
+      throw new Error('गलत यूज़रनेम या पासवर्ड।');
     }
 
     if (!found.active) {
       mockStorage.logAudit(found.user_id, 'LOGIN', found.username, 'FAILURE', 'Account deactivated');
-      throw new Error('Account has been deactivated. Please contact administrator.');
+      throw new Error('खाता निष्क्रिय कर दिया गया है। कृपया व्यवस्थापक से संपर्क करें।');
     }
 
-    if (found.password_hash !== password && password !== 'Admin@123' && password !== 'Operator@123') {
+    const isMatch = found.password_hash === password ||
+      (cleanUser === 'admin' && (password === 'Admin@123' || password === 'admin')) ||
+      ((cleanUser === 'deposit_op' || cleanUser === 'retrieval_op') && (password === 'Operator@123' || password === 'operator'));
+
+    if (!isMatch) {
       found.failed_login_count = (found.failed_login_count || 0) + 1;
+      mockStorage.setUsers(users);
       mockStorage.logAudit(found.user_id, 'FAILED_LOGIN', found.username, 'FAILURE', `Attempt ${found.failed_login_count}`);
-      throw new Error('Invalid username or password');
+      if (found.failed_login_count >= 5) {
+        throw new Error('अत्यधिक गलत प्रयासों के कारण खाता लॉक हो गया है। Contact administrator to unlock.');
+      }
+      throw new Error(`गलत यूज़रनेम या पासवर्ड। प्रयास ${found.failed_login_count}/5`);
     }
 
+    // Success: auto-unlock and reset failed attempts
     found.failed_login_count = 0;
     found.last_login_at = new Date().toISOString();
+    mockStorage.setUsers(users);
 
     const session: AuthSession = {
       token: `sess-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
@@ -458,6 +482,30 @@ export class ApiService {
       return;
     }
     mockStorage.resetPassword(userId, newPass, session?.user.user_id || 'ADMIN');
+  }
+
+  async unlockUser(userId: string): Promise<{ success: boolean; message: string }> {
+    const config = getBackendConfig();
+    const session = getSavedSession();
+    if (config.mode === 'apps_script') {
+      return await this.postToAppsScript('unlockUser', { user_id: userId });
+    }
+    mockStorage.unlockUser(userId, session?.user.user_id || 'ADMIN');
+    return { success: true, message: 'खाता सफलतापूर्वक अनलॉक कर दिया गया।' };
+  }
+
+  async emergencyUnlock(username: string, password: string): Promise<{ success: boolean; message: string }> {
+    const config = getBackendConfig();
+    if (config.mode === 'apps_script') {
+      return await this.postToAppsScript('emergencyUnlock', { username, password });
+    }
+    const cleanUser = username.trim().toLowerCase();
+    const users = mockStorage.getUsers();
+    const found = users.find((u) => u.username.toLowerCase() === cleanUser);
+    if (!found) throw new Error('यूज़र नहीं मिला।');
+    found.failed_login_count = 0;
+    mockStorage.setUsers(users);
+    return { success: true, message: 'खाता सफलतापूर्वक अनलॉक हो गया है! अब आप लॉगिन कर सकते हैं।' };
   }
 
   // Audit Logs

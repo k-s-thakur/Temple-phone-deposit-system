@@ -157,5 +157,35 @@ var UserService = {
     );
 
     return { success: true, message: "Password updated successfully" };
+  },
+
+  unlockUser: function(sessionToken, targetUserId) {
+    var adminSession = SessionService.requireAuth(sessionToken, ["ADMIN"]);
+    var users = Repository.getAll(Repository.SHEET_NAMES.USERS);
+    var target = null;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].user_id === targetUserId) {
+        target = users[i];
+        break;
+      }
+    }
+
+    if (!target) {
+      throw new Error("User '" + targetUserId + "' not found.");
+    }
+
+    Repository.updateRow(Repository.SHEET_NAMES.USERS, target._rowIndex, {
+      failed_login_count: 0
+    });
+
+    AuditService.log(
+      adminSession.userId,
+      "USER_UNLOCK",
+      targetUserId,
+      "SUCCESS",
+      { username: target.username }
+    );
+
+    return { success: true, user_id: targetUserId, message: "खाता सफलतापूर्वक अनलॉक कर दिया गया।" };
   }
 };

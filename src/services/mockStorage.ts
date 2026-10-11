@@ -367,6 +367,21 @@ export class MockStorageEngine {
     this.logAudit(currentAdminId, 'USER_UPDATE', userId, 'SUCCESS', { action: 'password_reset' });
   }
 
+  setUsers(users: User[]): void {
+    this.setStorage(STORAGE_KEYS.USERS, users);
+  }
+
+  unlockUser(userId: string, currentAdminId: string = 'ADMIN'): void {
+    const users = this.getUsers();
+    const target = users.find((u) => u.user_id === userId);
+    if (!target) {
+      throw new Error(`User '${userId}' not found.`);
+    }
+    target.failed_login_count = 0;
+    this.setStorage(STORAGE_KEYS.USERS, users);
+    this.logAudit(currentAdminId, 'USER_UPDATE', userId, 'SUCCESS', { action: 'unlock_account' });
+  }
+
   // Deposits
   getDeposits(): Deposit[] {
     return this.getStorage<Deposit[]>(STORAGE_KEYS.DEPOSITS, getInitialDeposits());
