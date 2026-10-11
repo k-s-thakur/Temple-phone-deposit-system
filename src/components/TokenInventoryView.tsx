@@ -29,8 +29,8 @@ export const TokenInventoryView: React.FC = () => {
 
   // Batch add modal
   const [batchModalOpen, setBatchModalOpen] = useState(false);
-  const [batchStart, setBatchStart] = useState('101');
-  const [batchEnd, setBatchEnd] = useState('150');
+  const [batchStart, setBatchStart] = useState('501');
+  const [batchEnd, setBatchEnd] = useState('600');
   const [actionLoading, setActionLoading] = useState(false);
 
   const fetchTokens = async () => {

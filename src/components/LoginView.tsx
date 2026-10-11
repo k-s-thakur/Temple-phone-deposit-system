@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { api, getBackendConfig } from '../services/api';
+import { api } from '../services/api';
 import { AuthSession } from '../types';
-import { Smartphone, Shield, KeyRound, User, Lock, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Smartphone, KeyRound, User, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 
 interface LoginViewProps {
   onLoginSuccess: (session: AuthSession) => void;
-  onOpenSettings: () => void;
 }
 
-export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenSettings }) => {
+export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -168,33 +167,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenSett
               <span className="bg-sky-100 text-sky-800 text-[10px] px-2 py-0.5 rounded font-medium">Return Counter</span>
             </button>
           </div>
-        </div>
-
-        {/* Backend Mode switch */}
-        <div className="mt-6 text-center">
-          {getBackendConfig().isEnvConfigured ? (
-            <div className="flex items-center justify-center space-x-2">
-              <span className="inline-flex items-center text-[11px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 font-medium">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span>
-                Backend: .env configured
-              </span>
-              <button
-                type="button"
-                onClick={onOpenSettings}
-                className="text-xs text-slate-500 hover:text-amber-700 underline font-medium cursor-pointer"
-              >
-                Settings
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={onOpenSettings}
-              className="text-xs text-slate-500 hover:text-amber-700 underline font-medium cursor-pointer"
-            >
-              Configure Google Apps Script Backend URL
-            </button>
-          )}
         </div>
       </div>
     </div>

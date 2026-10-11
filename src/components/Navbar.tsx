@@ -3,8 +3,6 @@ import { AuthSession, Role } from '../types';
 import {
   Smartphone,
   LogOut,
-  Settings,
-  Shield,
   Layers,
   ArrowDownLeft,
   ArrowUpRight,
@@ -19,7 +17,6 @@ interface NavbarProps {
   session: AuthSession | null;
   currentTab: string;
   onSelectTab: (tab: string) => void;
-  onOpenSettings: () => void;
   onLogout: () => void;
 }
 
@@ -27,7 +24,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   session,
   currentTab,
   onSelectTab,
-  onOpenSettings,
   onLogout
 }) => {
   if (!session) return null;
@@ -85,14 +81,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-xs text-slate-400">@{session.user.username}</span>
               </div>
             </div>
-
-            <button
-              onClick={onOpenSettings}
-              title="System Backend Settings"
-              className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-            >
-              <Settings className="w-5 h-5" />
-            </button>
 
             <button
               onClick={onLogout}

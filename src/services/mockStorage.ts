@@ -9,11 +9,11 @@ const STORAGE_KEYS = {
   BACKEND_CONFIG: 'temple_phone_backend_config'
 };
 
-// Seed initial default tokens (001 to 100)
+// Seed initial default tokens (001 to 500)
 function getInitialTokens(): TokenItem[] {
   const tokens: TokenItem[] = [];
   const now = new Date().toISOString();
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 1; i <= 500; i++) {
     const numStr = String(i).padStart(3, '0');
     tokens.push({
       token_no: numStr,
@@ -222,7 +222,29 @@ export class MockStorageEngine {
 
   // Tokens
   getTokens(): TokenItem[] {
-    return this.getStorage<TokenItem[]>(STORAGE_KEYS.TOKENS, getInitialTokens());
+    const tokens = this.getStorage<TokenItem[]>(STORAGE_KEYS.TOKENS, getInitialTokens());
+    if (tokens.length < 500) {
+      const existing = new Set(tokens.map((t) => t.token_no));
+      let modified = false;
+      const now = new Date().toISOString();
+      for (let i = 1; i <= 500; i++) {
+        const numStr = String(i).padStart(3, '0');
+        if (!existing.has(numStr)) {
+          tokens.push({
+            token_no: numStr,
+            active: true,
+            created_at: now,
+            notes: `Batch 1 - Token ${numStr}`
+          });
+          modified = true;
+        }
+      }
+      if (modified) {
+        tokens.sort((a, b) => parseInt(a.token_no, 10) - parseInt(b.token_no, 10));
+        this.setStorage(STORAGE_KEYS.TOKENS, tokens);
+      }
+    }
+    return tokens;
   }
 
   addToken(tokenNo: string, notes: string = ''): TokenItem {

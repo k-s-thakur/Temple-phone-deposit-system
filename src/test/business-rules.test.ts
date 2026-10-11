@@ -22,6 +22,25 @@ describe('Temple Phone Deposit & Retrieval PRD Business Rules', () => {
       expect(() => engine.normalizeToken('T-01')).toThrow('Token number must contain digits only');
       expect(() => engine.normalizeToken('abc')).toThrow('Token number must contain digits only');
     });
+
+    it('seeds 500 default tokens and allows depositing token 500', () => {
+      const tokens = engine.getTokens();
+      expect(tokens.length).toBe(500);
+      expect(tokens[0].token_no).toBe('001');
+      expect(tokens[499].token_no).toBe('500');
+
+      const deposit = engine.createDeposit(
+        { user_id: 'USR-DEPOP01', role: 'DEPOSIT_OPERATOR' },
+        {
+          token_no: '500',
+          visitor_name: 'Test Visitor',
+          mobile_number: '9876543210',
+          phone_count: 1,
+          request_id: 'req-test-500'
+        }
+      );
+      expect(deposit.token_no).toBe('500');
+    });
   });
 
   describe('Deposit Workflow & Validation (PRD Section 5.1 & 6)', () => {

@@ -11,12 +11,10 @@ import { UserManagementView } from './components/UserManagementView';
 import { TokenInventoryView } from './components/TokenInventoryView';
 import { AuditLogView } from './components/AuditLogView';
 import { ShiftClosingView } from './components/ShiftClosingView';
-import { SettingsModal } from './components/SettingsModal';
 
 export const App: React.FC = () => {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [currentTab, setCurrentTab] = useState<string>('deposit');
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
   useEffect(() => {
@@ -56,17 +54,9 @@ export const App: React.FC = () => {
 
   if (!session) {
     return (
-      <>
-        <LoginView
-          onLoginSuccess={handleLoginSuccess}
-          onOpenSettings={() => setSettingsOpen(true)}
-        />
-        <SettingsModal
-          isOpen={settingsOpen}
-          onClose={() => setSettingsOpen(false)}
-          onConfigChanged={triggerDataRefresh}
-        />
-      </>
+      <LoginView
+        onLoginSuccess={handleLoginSuccess}
+      />
     );
   }
 
@@ -76,7 +66,6 @@ export const App: React.FC = () => {
         session={session}
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
-        onOpenSettings={() => setSettingsOpen(true)}
         onLogout={handleLogout}
       />
 
@@ -113,12 +102,6 @@ export const App: React.FC = () => {
           <AuditLogView />
         )}
       </main>
-
-      <SettingsModal
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        onConfigChanged={triggerDataRefresh}
-      />
     </div>
   );
 };

@@ -1222,11 +1222,11 @@ function setupDatabase(optionalSpreadsheetId) {
   setupSheetHeaders(tokSheet, tokHeaders, "#1e293b", "#ffffff");
   tokSheet.getRange("A:A").setNumberFormat("@");
 
-  // Seed sample tokens 001 to 100 if empty
+  // Seed sample tokens 001 to 500 if empty
   if (tokSheet.getLastRow() <= 1) {
     var sampleTokens = [];
     var nowIso = new Date().toISOString();
-    for (var i = 1; i <= 100; i++) {
+    for (var i = 1; i <= 500; i++) {
       var tokStr = ("000" + i).slice(-3);
       sampleTokens.push(["'" + tokStr, true, nowIso, "Initial Batch Token " + tokStr]);
     }
@@ -1568,5 +1568,40 @@ function doPost(e) {
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * 🚀 Run this function in Google Apps Script editor to instantly populate tokens 101 to 500 in the Google Sheet!
+ */
+function addTokensUpTo500() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Tokens");
+  if (!sheet) {
+    throw new Error("Tokens sheet not found. Run setupDatabase() first.");
+  }
+
+  var data = sheet.getDataRange().getValues();
+  var existingSet = {};
+  for (var r = 1; r < data.length; r++) {
+    var raw = String(data[r][0]).replace(/^'/, '').trim();
+    if (raw) existingSet[raw] = true;
+  }
+
+  var newRows = [];
+  var nowIso = new Date().toISOString();
+  for (var i = 1; i <= 500; i++) {
+    var tokStr = ("000" + i).slice(-3);
+    if (!existingSet[tokStr]) {
+      newRows.push(["'" + tokStr, true, nowIso, "Initial Batch Token " + tokStr]);
+    }
+  }
+
+  if (newRows.length > 0) {
+    sheet.getRange(sheet.getLastRow() + 1, 1, newRows.length, 4).setValues(newRows);
+    SpreadsheetApp.flush();
+    Logger.log("✅ Successfully added " + newRows.length + " new tokens! Total tokens now 500.");
+  } else {
+    Logger.log("ℹ️ All tokens up to 500 already exist.");
+  }
 }
 
